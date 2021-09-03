@@ -53,8 +53,6 @@ class OTERateSensor(Entity):
         cost_table = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
         cost_table2 = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/multi-regional-coupling"
 
-        eur_kwh = 0
-        cost_data = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
         date = datetime.datetime.now()
         params = dict (
             date = date.strftime('%Y-%m-%d')
