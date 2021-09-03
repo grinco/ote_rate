@@ -1,20 +1,20 @@
 """Platform for sensor integration."""
 from homeassistant.helpers.entity import Entity
-import logging
-
-_LOGGER = logging.getLogger(__name__)
 
 """ External Imports """
 import requests
 import json
 import datetime
+import logging
+
 
 """ Constants """
 UNIT_OF_MEASUREMENT = "EUR/mWh"
+_LOGGER = logging.getLogger(__name__)
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
-    async_add_entities([OTERateSensor()], update_before_add=True)
+    add_entities([OTERateSensor()], update_before_add=True)
 
 
 class OTERateSensor(Entity):
@@ -44,7 +44,7 @@ class OTERateSensor(Entity):
         """Return True if entity is available."""
         return self._available
 
-    async def async_update(self):
+    def update(self):
         """Fetch new state data for the sensor.
 
         This is the only method that should fetch new data for Home Assistant.
@@ -68,7 +68,7 @@ class OTERateSensor(Entity):
               date = date.strftime('%Y-%m-%d')
           )
 
-          response = await requests.get(url=cost_data, params=params)
+          response = requests.get(url=cost_data, params=params)
           json = response.json()
           axis = ""
           for key in json['axis'].keys():
