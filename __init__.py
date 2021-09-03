@@ -1,1 +1,1 @@
-"""The example sensor integration."""
+"""OTE Rate sensor integration."""

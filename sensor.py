@@ -1,5 +1,8 @@
 """Platform for sensor integration."""
 from homeassistant.helpers.entity import Entity
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 
 """ External Imports """
 import requests
@@ -9,9 +12,9 @@ import datetime
 """ Constants """
 UNIT_OF_MEASUREMENT = "EUR/mWh"
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     """Set up the sensor platform."""
-    add_entities([OTERateSensor()])
+    async_add_entities([OTERateSensor()], update_before_add=True)
 
 
 class OTERateSensor(Entity):
@@ -36,40 +39,48 @@ class OTERateSensor(Entity):
         """Return the unit of measurement."""
         return UNIT_OF_MEASUREMENT
 
-    def update(self):
+    @property
+    def available(self):
+        """Return True if entity is available."""
+        return self._available
+
+    async def async_update(self):
         """Fetch new state data for the sensor.
 
         This is the only method that should fetch new data for Home Assistant.
         """
-        self._state = self.get_current_value()
+        self._get_current_value()
 
-    def get_current_value():
+    def _get_current_value(self):
         """ Parse the data and return value in EUR/kWh
         """
 
-        eur_mwh = 0
-        cost_string = "Cena (EUR/MWh)"
-        cost_data = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
-        # todo: add secondary validations
-        cost_table = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
-        cost_table2 = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/multi-regional-coupling"
+        try:
+          eur_mwh = 0
+          cost_string = "Cena (EUR/MWh)"
+          cost_data = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
+          # todo: add secondary validations
+          cost_table = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
+          cost_table2 = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/multi-regional-coupling"
 
-        date = datetime.datetime.now()
-        params = dict (
-            date = date.strftime('%Y-%m-%d')
-        )
+          date = datetime.datetime.now()
+          params = dict (
+              date = date.strftime('%Y-%m-%d')
+          )
 
+          response = await requests.get(url=cost_data, params=params)
+          json = response.json()
+          axis = ""
+          for key in json['axis'].keys():
+              if json['axis'][key]['legend'] == cost_string:
+                  axis = key
 
-        response = requests.get(url=cost_data, params=params)
-        json = response.json()
-        axis = ""
-        for key in json['axis'].keys():
-            if json['axis'][key]['legend'] == cost_string:
-                axis = key
+          for values in json['data']['dataLine']:
+              if values['title'] == cost_string:
+                  eur_mwh = values['point'][date.hour][axis]
 
-        for values in json['data']['dataLine']:
-            if values['title'] == cost_string:
-                eur_mwh = values['point'][date.hour][axis]
-
-
-        return eur_mwh
+          self._state = float(eur_mwh)
+          self._available = True
+        except:
+          self._available = False
+          _LOGGER.exception("Error occured while retrieving data from ote-cr.cz.")
