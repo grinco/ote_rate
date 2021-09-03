@@ -1,4 +1,4 @@
-# Example Sensor
+# OTE Energy Cost Sensor for Home Assistant
 
 This is an integration providing current price per megawatt of energy based on the quote
 from ote-cr.cz
