@@ -47,7 +47,8 @@ class OTERateSensor(Entity):
         """ Parse the data and return value in EUR/kWh
         """
 
-        eur_kwh = 0
+        eur_mwh = 0
+        cost_string = "Cena (EUR/MWh)"
         cost_data = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
         # todo: add secondary validations
         cost_table = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
@@ -58,7 +59,17 @@ class OTERateSensor(Entity):
             date = date.strftime('%Y-%m-%d')
         )
 
-        response = requests.get(url=cost_data, params=params)
-        json_data = response.json()
 
-        return eur_kwh
+        response = requests.get(url=cost_data, params=params)
+        json = response.json()
+        axis = ""
+        for key in json['axis'].keys():
+            if json['axis'][key]['legend'] == cost_string:
+                axis = key
+
+        for values in json['data']['dataLine']:
+            if values['title'] == cost_string:
+                eur_mwh = values['point'][date.hour][axis]
+
+
+        return eur_mwh

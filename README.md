@@ -13,7 +13,7 @@ Same can be achieved through the follwoing configuration:
     name: "Current Energy cost in EUR/mWh"
 ```
 
-If you have an exchange rate sensor - you can calculate the value using template sensor:
+If you have an exchange rate sensor - you can calculate the value in local currency using template sensor:
 ```
   - platform: template
     sensors:
