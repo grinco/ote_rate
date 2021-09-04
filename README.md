@@ -19,8 +19,8 @@ sensor:
 ### Calculating price in the local currency
 
 If you have an exchange rate sensor - you can calculate the value in local currency using template sensor:
-```
-  - platform: template
+```yaml
+  platform: template
     sensors:
       czk_price_per_kwh:
         friendly_name: "Current Electricity Price"
