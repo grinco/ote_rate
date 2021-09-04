@@ -21,11 +21,11 @@ If you have an exchange rate sensor - you can calculate the value in local curre
 ### Installation
 
 Copy this folder to `<config_dir>/custom_components/ote_rate/`.
+If you're using HACS - feel free to add https://github.com/grinco/ote_rate as custom repository.
 
-Add the following to your `configuration.yaml` file:
+Once you've installed the custom integration, add the following to your `configuration.yaml` file:
 
 ```yaml
-# Example configuration.yaml entry
 sensor:
   platform: ote_rate
 ```
