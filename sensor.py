@@ -35,6 +35,11 @@ class OTERateSensor(Entity):
         return self._state
 
     @property
+    def extra_state_attributes(self):
+        """Return other attributes of the sensor."""
+        return self._attr
+
+    @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
         return UNIT_OF_MEASUREMENT
@@ -44,6 +49,7 @@ class OTERateSensor(Entity):
         """Return True if entity is available."""
         return self._available
 
+
     def update(self):
         """Fetch new state data for the sensor.
 
@@ -51,17 +57,18 @@ class OTERateSensor(Entity):
         """
         self._get_current_value()
 
+
     def _get_current_value(self):
         """ Parse the data and return value in EUR/kWh
         """
 
         try:
-          eur_mwh = 0
+          current_cost = 0
+          cost_history = dict()
+          history_index = 0
           cost_string = "Cena (EUR/MWh)"
+          hour_string = "Hodina"
           cost_data = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
-          # todo: add secondary validations
-          cost_table = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
-          cost_table2 = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/multi-regional-coupling"
 
           date = datetime.datetime.now()
           params = dict (
@@ -70,16 +77,25 @@ class OTERateSensor(Entity):
 
           response = requests.get(url=cost_data, params=params)
           json = response.json()
-          axis = ""
+          cost_axis = ""
+          hour_axis = ""
           for key in json['axis'].keys():
               if json['axis'][key]['legend'] == cost_string:
-                  axis = key
+                  cost_axis = key
+              if json['axis'][key]['legend'] == hour_string:
+                  hour_axis = key
+
 
           for values in json['data']['dataLine']:
               if values['title'] == cost_string:
-                  eur_mwh = values['point'][date.hour][axis]
+                  for data in values['point']:
+                     history_index = int(data[hour_axis])
+                     cost_history[history_index] = float(data[cost_axis])
+                  current_cost = cost_history[date.hour]
 
-          self._state = float(eur_mwh)
+
+          self._state = current_cost
+          self._attr = cost_history
           self._available = True
         except:
           self._available = False
