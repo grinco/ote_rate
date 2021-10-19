@@ -89,7 +89,7 @@ class OTERateSensor(Entity):
           for values in json['data']['dataLine']:
               if values['title'] == cost_string:
                   for data in values['point']:
-                     history_index = int(data[hour_axis])
+                     history_index = int(data[hour_axis])-1
                      cost_history[history_index] = float(data[cost_axis])
                   current_cost = cost_history[date.hour]
 
