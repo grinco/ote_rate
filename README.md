@@ -25,8 +25,8 @@ If you have an exchange rate sensor - you can calculate the value in local curre
       czk_price_per_kwh:
         friendly_name: "Current Electricity Price"
         value_template: >-
-          {% set CURRENT_PRICE = states("sensor.current_ote_energy_cost") | float %}
-          {% set EUR_CZK = states("sensor.exchange_rate") | float %}
+          {% set CURRENT_PRICE = states("sensor.current_ote_energy_cost") | float(default='none') %}
+          {% set EUR_CZK = states("sensor.exchange_rate") | float(default='none') %}
           {{- (CURRENT_PRICE * EUR_CZK / 1000) | round(3) -}}
         unit_of_measurement: "CZK/kWh"
 ```
