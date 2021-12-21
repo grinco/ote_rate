@@ -1,5 +1,10 @@
 """Platform for sensor integration."""
 from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import (
+    DEVICE_CLASS_MONETARY,
+    SensorEntity,
+    SensorEntityDescription,
+)
 
 """ External Imports """
 import requests
@@ -9,7 +14,9 @@ import logging
 
 
 """ Constants """
-UNIT_OF_MEASUREMENT = "EUR/mWh"
+NATIVE_UNIT_OF_MEASUREMENT = "EUR/mWh"
+DEVICE_CLASS = "monetary"
+
 _LOGGER = logging.getLogger(__name__)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -17,12 +24,13 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities([OTERateSensor()], update_before_add=True)
 
 
-class OTERateSensor(Entity):
+class OTERateSensor(SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(self):
         """Initialize the sensor."""
-        self._state = None
+        self._value = None
+        self._attr = None
 
     @property
     def name(self):
@@ -30,9 +38,19 @@ class OTERateSensor(Entity):
         return 'Current OTE Energy Cost'
 
     @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._state
+    def native_value(self):
+        """Return the native value of the sensor."""
+        return self._value
+
+    @property
+    def native_unit_of_measurement(self):
+        """Return the native unit of measurement."""
+        return NATIVE_UNIT_OF_MEASUREMENT
+
+    @property
+    def device_class(self):
+        """Return the device class of the sensor."""
+        return DEVICE_CLASS
 
     @property
     def extra_state_attributes(self):
@@ -40,15 +58,9 @@ class OTERateSensor(Entity):
         return self._attr
 
     @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement."""
-        return UNIT_OF_MEASUREMENT
-
-    @property
     def available(self):
         """Return True if entity is available."""
         return self._available
-
 
     def update(self):
         """Fetch new state data for the sensor.
@@ -94,7 +106,7 @@ class OTERateSensor(Entity):
                   current_cost = cost_history[date.hour]
 
 
-          self._state = current_cost
+          self._value = current_cost
           self._attr = cost_history
           self._available = True
         except:
