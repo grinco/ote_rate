@@ -14,7 +14,7 @@ import logging
 
 
 """ Constants """
-NATIVE_UNIT_OF_MEASUREMENT = "EUR/mWh"
+NATIVE_UNIT_OF_MEASUREMENT = "EUR/MWh"
 DEVICE_CLASS = "monetary"
 
 _LOGGER = logging.getLogger(__name__)
