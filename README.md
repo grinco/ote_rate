@@ -13,14 +13,14 @@ Once you've installed the custom integration, add the following to your `configu
 
 ```yaml
 sensor:
-  platform: ote_rate
+  - platform: ote_rate
 ```
 
 ### Calculating price in the local currency
 
 If you have an exchange rate sensor - you can calculate the value in local currency using template sensor:
 ```yaml
-  platform: template
+- platform: template
     sensors:
       czk_price_per_kwh:
         friendly_name: "Current Electricity Price"
