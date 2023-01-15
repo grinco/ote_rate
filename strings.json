@@ -1,0 +1,40 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Define OTE rates parser settings",
+        "data": {
+          "name": "Name of the parser",
+          "charge": "Set charge if any (it will be deducted from the current price)",
+          "currency": "Currency"
+        }
+      },
+      "CZK": {
+        "title": "Select exchange rate sensor",
+        "data": {
+          "read_serial_port": "Serial port name",
+          "baudrate": "Baudrate"
+        }
+      }
+    }
+  },
+
+  "options": {
+    "step": {
+      "init": {
+        "title": "Define OTE rates parser settings",
+        "data": {
+          "charge": "Set charge if any (it will be deducted from the current price)",
+          "currency": "Currency"
+        }
+      },
+      "CZK": {
+        "title": "Select exchange rate sensor",
+        "data": {
+          "read_serial_port": "Serial port name",
+          "baudrate": "Baudrate"
+        }
+      }
+    }
+  }
+}
