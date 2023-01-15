@@ -4,7 +4,7 @@
   "documentation": "https://github.com/grinco/ote_rate",
   "dependencies": [],
   "codeowners": [],
-  "requirements": ["requests"],
+  "requirements": ["requests", "aiohttp", "asyncio"],
   "iot_class": "cloud_polling",
   "config_flow": true,
   "version": "0.2.1"

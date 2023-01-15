@@ -1,28 +1,39 @@
 from homeassistant.components.sensor import (
     SensorEntity,
 )
-import requests
+import aiohttp
 from datetime import datetime, timedelta
+from homeassistant.core import HomeAssistant
+from homeassistant import config_entries
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import logging
 from .const import (
     NEXT_DAY_AVAILABLE_ATTRIBUTE,
     NEXT_DAY_PREFIX,
     DEVICE_CLASS,
     NATIVE_UNIT_OF_MEASUREMENT,
+    HOUR_RESPONSE_NAME,
+    COST_RESPONSE_NAME,
+    OTE_URL,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
 
-def setup_platform(hass, config, add_entities, discovery_info=None) -> None:
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config: config_entries.ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+    discovery_info=None,
+) -> None:
     """Set up the sensor platform."""
-    add_entities([OTERateSensor(hass)], update_before_add=True)
+    async_add_entities([OTERateSensor(hass)], update_before_add=True)
 
 
 class OTERateSensor(SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, hass) -> None:
+    def __init__(self, hass: HomeAssistant) -> None:
         """Initialize the sensor."""
         self._value = None
         self._attr = None
@@ -58,23 +69,15 @@ class OTERateSensor(SensorEntity):
         """Return True if entity is available."""
         return self._available
 
-    def update(self) -> None:
-        """Fetch new state data for the sensor.
-
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        self._get_current_value()
-
-    def _get_current_value(self) -> None:
-        """Parse the data and return value in EUR/kWh"""
-
+    async def async_update(self) -> None:
+        """Parse the data from OTE"""
         try:
 
             now = datetime.now()
             next_day = datetime.now() + timedelta(days=1)
 
-            today_costs: DateCosts = self._get_costs_for_date(now)
-            next_day_costs: DateCosts = self._get_costs_for_date(next_day)
+            today_costs: DateCosts = await self.__async_get_costs_for_date(now)
+            next_day_costs: DateCosts = await self.__async_get_costs_for_date(next_day)
 
             attributes = dict()
 
@@ -95,32 +98,28 @@ class OTERateSensor(SensorEntity):
             self._available = False
             _LOGGER.exception("Error occured while retrieving data from ote-cr.cz")
 
-    def _get_costs_for_date(self, date: datetime) -> "DateCosts":
-        current_cost = 0
+    async def __async_get_costs_for_date(self, date: datetime) -> "DateCosts":
+        params = {"report_date": date.strftime("%Y-%m-%d")}
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(OTE_URL, params=params) as resp:
+                return self.__parse_response_with_costs(date, await resp.json())
+
+    def __parse_response_with_costs(self, date: datetime, json) -> "DateCosts":
         cost_history = dict()
-        history_index = 0
-        cost_string = "Cena (EUR/MWh)"
-        hour_string = "Hodina"
-        cost_data = (
-            "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
-        )
-
-        params = dict(date=date.strftime("%Y-%m-%d"))
-
-        response = requests.get(url=cost_data, params=params, timeout=60)
-
-        json = response.json()
-
         cost_axis = ""
         hour_axis = ""
+        current_cost = 0
+        history_index = 0
+
         for key in json["axis"].keys():
-            if json["axis"][key]["legend"] == cost_string:
+            if json["axis"][key]["legend"] == COST_RESPONSE_NAME:
                 cost_axis = key
-            if json["axis"][key]["legend"] == hour_string:
+            if json["axis"][key]["legend"] == HOUR_RESPONSE_NAME:
                 hour_axis = key
 
         for values in json["data"]["dataLine"]:
-            if values["title"] == cost_string:
+            if values["title"] == COST_RESPONSE_NAME:
                 for data in values["point"]:
                     history_index = int(data[hour_axis]) - 1
                     cost_history[history_index] = float(data[cost_axis])
