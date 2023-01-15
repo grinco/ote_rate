@@ -1,12 +1,12 @@
 """Constants used by ote rates."""
 from __future__ import annotations
-
+from dataclasses import dataclass
 from typing import Final
-
+from homeassistant.core import HomeAssistant
 
 DOMAIN: Final = "ote_rate"
-NATIVE_UNIT_OF_MEASUREMENT: Final = "EUR/MWh"
-DEVICE_CLASS: Final = "monetary"
+ATTR_MANUFACTURER: Final = "OTE"
+MWH: Final = "MWh"
 NEXT_DAY_PREFIX: Final = "next_day_"
 NEXT_DAY_AVAILABLE_ATTRIBUTE: Final = "next_day_available"
 CONF_CURRENCY: Final = "currency"
@@ -15,7 +15,19 @@ CONF_EXCHANGE_RATE_SENSOR_ID: Final = "exchange_rate_sensor_id"
 CONF_CHARGE: Final = "charge"
 CURRENCY_EUR: Final = "EUR"
 CURRENCY_CZK: Final = "CZK"
-DEFAULT_NAME: Final = "OTE rates"
+DEFAULT_NAME: Final = "OTE Energy"
 COST_RESPONSE_NAME: Final = "Cena (EUR/MWh)"
 HOUR_RESPONSE_NAME: Final = "Hodina"
-OTE_URL: Final = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
+OTE_URL: Final = (
+    "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh/@@chart-data"
+)
+
+
+@dataclass
+class OteRateSettings:
+    hass: HomeAssistant
+    name: str
+    currency: str
+    charge: float
+    custom_exchange_rate: float
+    exchange_rate_sensor_id: str

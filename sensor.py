@@ -1,20 +1,26 @@
 from homeassistant.components.sensor import (
     SensorEntity,
+    SensorEntityDescription,
+    SensorDeviceClass,
 )
+from homeassistant.helpers.entity import DeviceInfo
 import aiohttp
 from datetime import datetime, timedelta
 from homeassistant.core import HomeAssistant
 from homeassistant import config_entries
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.const import CONF_HOST, CONF_NAME, CONF_PORT, CONF_SCAN_INTERVAL
 import logging
+from typing import Optional
+
 from .const import (
-    NEXT_DAY_AVAILABLE_ATTRIBUTE,
-    NEXT_DAY_PREFIX,
-    DEVICE_CLASS,
-    NATIVE_UNIT_OF_MEASUREMENT,
     HOUR_RESPONSE_NAME,
     COST_RESPONSE_NAME,
     OTE_URL,
+    DOMAIN,
+    ATTR_MANUFACTURER,
+    OteRateSettings,
+    MWH,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -27,23 +33,55 @@ async def async_setup_entry(
     discovery_info=None,
 ) -> None:
     """Set up the sensor platform."""
-    async_add_entities([OTERateSensor(hass, config)], update_before_add=True)
+    name = config.options[CONF_NAME]
+    settings: OteRateSettings = hass.data[DOMAIN][name]["settings"]
+    device_info = DeviceInfo(
+        name=name, identifiers={(DOMAIN, name)}, manufacturer=ATTR_MANUFACTURER
+    )
+
+    today_sensor_description = SensorEntityDescription(
+        key="current_cost",
+        name=f"{settings.name} Current Cost",
+        device_class=SensorDeviceClass.MONETARY,
+        native_unit_of_measurement=f"{settings.currency}/{MWH}",
+    )
+    today_sensor = OTERateSensor(
+        hass, settings, device_info, today_sensor_description, timedelta()
+    )
+
+    next_day_sensor_description = SensorEntityDescription(
+        key="next_day_cost",
+        name=f"{settings.name} Next Day",
+        device_class=SensorDeviceClass.MONETARY,
+        native_unit_of_measurement=f"{settings.currency}/{MWH}",
+    )
+    next_day_sensor = OTERateSensor(
+        hass, settings, device_info, next_day_sensor_description, timedelta(days=1)
+    )
+
+    async_add_entities([today_sensor, next_day_sensor], update_before_add=True)
 
 
 class OTERateSensor(SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, hass: HomeAssistant, config: config_entries.ConfigEntry) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        settings: OteRateSettings,
+        device_info: DeviceInfo,
+        description: SensorEntityDescription,
+        timedelta: timedelta,
+    ) -> None:
         """Initialize the sensor."""
         self._value = None
         self._attr = None
+        self._platform_name = "OTE Energy"
         self._hass = hass
-        self._config = config
-
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return "Current OTE Energy Cost"
+        self._settings = settings
+        self._attr_device_info = device_info
+        self.entity_description = description
+        self._timedelta = timedelta
 
     @property
     def native_value(self):
@@ -51,66 +89,49 @@ class OTERateSensor(SensorEntity):
         return self._value
 
     @property
-    def native_unit_of_measurement(self):
-        """Return the native unit of measurement."""
-        return NATIVE_UNIT_OF_MEASUREMENT
-
-    @property
-    def device_class(self):
-        """Return the device class of the sensor."""
-        return DEVICE_CLASS
-
-    @property
     def extra_state_attributes(self):
         """Return other attributes of the sensor."""
         return self._attr
 
     @property
-    def available(self):
-        """Return True if entity is available."""
-        return self._available
+    def unique_id(self) -> Optional[str]:
+        print(f"{self._platform_name}_{self.entity_description.key}")
+        return f"{self._platform_name}_{self.entity_description.key}"
 
     async def async_update(self) -> None:
         """Parse the data from OTE"""
         try:
 
-            now = datetime.now()
-            next_day = datetime.now() + timedelta(days=1)
-
-            today_costs: DateCosts = await self.__async_get_costs_for_date(now)
-            next_day_costs: DateCosts = await self.__async_get_costs_for_date(next_day)
+            date = datetime.now() + self._timedelta
+            date_costs = await self.__async_get_costs_for_date(date)
 
             attributes = dict()
 
-            for hour, cost in today_costs.cost_history.items():
+            for hour, cost in date_costs.items():
                 attributes[hour] = cost
 
-            for hour, cost in next_day_costs.cost_history.items():
-                attributes[f"{NEXT_DAY_PREFIX}{hour}"] = cost
+            self._attr_available = len(date_costs) > 0
+            if self._attr_available:
+                self._value = date_costs[date.hour]
+            else:
+                self._value = None
 
-            attributes[NEXT_DAY_AVAILABLE_ATTRIBUTE] = (
-                len(next_day_costs.cost_history) > 0
-            )
-
-            self._value = today_costs.date_cost
             self._attr = attributes
-            self._available = True
         except:
-            self._available = False
+            self._attr_available = False
             _LOGGER.exception("Error occured while retrieving data from ote-cr.cz")
 
-    async def __async_get_costs_for_date(self, date: datetime) -> "DateCosts":
+    async def __async_get_costs_for_date(self, date: datetime) -> dict:
         params = {"report_date": date.strftime("%Y-%m-%d")}
 
         async with aiohttp.ClientSession() as session:
             async with session.get(OTE_URL, params=params) as resp:
                 return self.__parse_response_with_costs(date, await resp.json())
 
-    def __parse_response_with_costs(self, date: datetime, json) -> "DateCosts":
-        cost_history = dict()
+    def __parse_response_with_costs(self, date: datetime, json) -> dict:
+        date_costs = dict()
         cost_axis = ""
         hour_axis = ""
-        current_cost = 0
         history_index = 0
 
         for key in json["axis"].keys():
@@ -123,13 +144,6 @@ class OTERateSensor(SensorEntity):
             if values["title"] == COST_RESPONSE_NAME:
                 for data in values["point"]:
                     history_index = int(data[hour_axis]) - 1
-                    cost_history[history_index] = float(data[cost_axis])
-                current_cost = cost_history[date.hour]
+                    date_costs[history_index] = float(data[cost_axis])
 
-        return DateCosts(cost_history, current_cost)
-
-
-class DateCosts:
-    def __init__(self, cost_history: dict, date_cost: float) -> None:
-        self.cost_history = cost_history
-        self.date_cost = date_cost
+        return date_costs
