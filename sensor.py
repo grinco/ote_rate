@@ -27,17 +27,18 @@ async def async_setup_entry(
     discovery_info=None,
 ) -> None:
     """Set up the sensor platform."""
-    async_add_entities([OTERateSensor(hass)], update_before_add=True)
+    async_add_entities([OTERateSensor(hass, config)], update_before_add=True)
 
 
 class OTERateSensor(SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, hass: HomeAssistant) -> None:
+    def __init__(self, hass: HomeAssistant, config: config_entries.ConfigEntry) -> None:
         """Initialize the sensor."""
         self._value = None
         self._attr = None
         self._hass = hass
+        self._config = config
 
     @property
     def name(self):
