@@ -10,7 +10,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .api import OteApiClient
 from .state import OteStateData
 from datetime import datetime, timedelta
-from .const import DOMAIN, OTE_DENNI_TRH
+from .const import DOMAIN, OTE_DENNI_TRH, DEFAULT_OTE_CURRENCY
 
 SCAN_INTERVAL = timedelta(seconds=30)
 
@@ -53,9 +53,13 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
         """Update data via library."""
         try:
             now = datetime.now()
-            date_costs = await self.api.async_get_costs_for_date(OTE_DENNI_TRH, now)
-            next_day_costs = await self.api.async_get_costs_for_date(
-                OTE_DENNI_TRH, now + timedelta(days=1)
+            date_costs = self.__convert_to_currency(
+                await self.api.async_get_costs_for_date(OTE_DENNI_TRH, now)
+            )
+            next_day_costs = self.__convert_to_currency(
+                await self.api.async_get_costs_for_date(
+                    OTE_DENNI_TRH, now + timedelta(days=1)
+                )
             )
             if len(next_day_costs) == 0:
                 next_day_costs = None
@@ -64,3 +68,27 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
             return state
         except Exception as exception:
             raise UpdateFailed() from exception
+
+    def __convert_to_currency(self, costs: dict) -> dict:
+        price = self.settings.currency
+        if self.settings.currency == DEFAULT_OTE_CURRENCY:
+            return costs
+
+        converted = dict()
+
+        sensor_rate_state = self.hass.states.get(self.settings.exchange_rate_sensor_id)
+
+        exchange_rate = (
+            float(sensor_rate_state.state)
+            if sensor_rate_state is not None and sensor_rate_state.state != "unknown"
+            else self.settings.custom_exchange_rate
+        )
+
+        print(
+            f"exchange_rate {exchange_rate} {self.hass.states.get(self.settings.exchange_rate_sensor_id)}"
+        )
+
+        for hour, price in costs.items():
+            converted[hour] = price * exchange_rate
+
+        return converted

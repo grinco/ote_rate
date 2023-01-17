@@ -16,6 +16,7 @@ CONF_EXCHANGE_RATE_SENSOR_ID: Final = "exchange_rate_sensor_id"
 CONF_CHARGE: Final = "charge"
 CURRENCY_EUR: Final = "EUR"
 CURRENCY_CZK: Final = "CZK"
+DEFAULT_OTE_CURRENCY: Final = CURRENCY_EUR
 DEFAULT_NAME: Final = "OTE Energy"
 COST_RESPONSE_NAME: Final = "Cena (EUR/MWh)"
 HOUR_RESPONSE_NAME: Final = "Hodina"

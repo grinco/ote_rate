@@ -34,7 +34,7 @@ class CostsSensor(IntegrationOteEntity, SensorEntity):
         print(f"key = {self.key}")
         self.entity_description = SensorEntityDescription(
             device_class=SensorDeviceClass.MONETARY,
-            unit_of_measurement=f"{coordinator.settings.currency}/{MWH}",
+            native_unit_of_measurement=f"{coordinator.settings.currency}/{MWH}",
             key=self.key,
         )
 
