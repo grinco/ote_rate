@@ -5,7 +5,7 @@ from typing import Final
 DOMAIN: Final = "ote_rate"
 VERSION: Final = "0.2.1"
 ATTR_MANUFACTURER: Final = "OTE"
-ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
+ATTRIBUTION = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
 
 MWH: Final = "MWh"
 NEXT_DAY_PREFIX: Final = "next_day_"

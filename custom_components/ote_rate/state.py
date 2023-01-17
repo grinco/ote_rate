@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class OteStateData:
     """Class for keeping track of ote states."""
+
     today_costs: dict
     next_day_costs: dict | None
 

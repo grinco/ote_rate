@@ -1,0 +1,40 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Nastavení OTE parseru",
+        "data": {
+          "name": "Název komponenty",
+          "charge": "Poplatky (budou odečteny od ceny na OTE)",
+          "currency": "Měna"
+        }
+      },
+      "CZK": {
+        "title": "Vyberte sensor pro kurz",
+        "data": {
+          "read_serial_port": "Serial port name",
+          "baudrate": "Baudrate"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Nastavení OTE parseru",
+        "data": {
+          "name": "Název komponenty",
+          "charge": "Poplatky (budou odečteny od ceny na OTE)",
+          "currency": "Měna"
+        }
+      },
+      "CZK": {
+        "title": "Vyberte sensor pro kurz",
+        "data": {
+          "read_serial_port": "Serial port name",
+          "baudrate": "Baudrate"
+        }
+      }
+    }
+  }
+}
