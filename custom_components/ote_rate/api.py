@@ -4,9 +4,7 @@ import asyncio
 import socket
 import aiohttp
 import async_timeout
-import aiohttp
 from datetime import datetime
-import logging
 
 from .const import (
     HOUR_RESPONSE_NAME,
@@ -16,7 +14,7 @@ from .const import (
 )
 
 
-TIMEOUT = 10
+TIMEOUT = 30
 
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)

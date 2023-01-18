@@ -2,25 +2,13 @@ from collections.abc import Mapping
 from typing import Any, cast
 
 import voluptuous as vol
-from homeassistant import config_entries
 from homeassistant.const import (
-    CONF_HOST,
-    CONF_PORT,
     CONF_NAME,
-    CONF_SCAN_INTERVAL,
 )
-from homeassistant.const import (
-    MAJOR_VERSION,
-    MINOR_VERSION,
-)
-from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import selector
 from homeassistant.helpers.schema_config_entry_flow import (
-    SchemaCommonFlowHandler,
     SchemaConfigFlowHandler,
-    SchemaFlowError,
     SchemaFlowFormStep,
-    SchemaFlowMenuStep,
 )
 
 from .const import (

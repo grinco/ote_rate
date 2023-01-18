@@ -1,4 +1,5 @@
 """OteEntity class"""
+from abc import abstractmethod
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity import DeviceInfo
@@ -20,9 +21,20 @@ class IntegrationOteEntity(CoordinatorEntity):
         self.config_entry = config_entry
 
     @property
+    @abstractmethod
+    def _name_post_fix(self) -> str:
+        """Name post fix. Will be used in entity name."""
+
+    @property
+    @abstractmethod
     def key(self):
         """Return a unique key to use for this entity."""
-        return ""
+
+    @property
+    def name(self):
+        """Return the name of the sensor."""
+        coordinator: OteDataUpdateCoordinator = self.coordinator
+        return f"{coordinator.settings.name} {self._name_post_fix}"
 
     @property
     def unique_id(self):

@@ -1,4 +1,5 @@
 """Binary sensors platform for ote rates."""
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorDeviceClass,
@@ -7,7 +8,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .entity import IntegrationOteEntity
 from .coordinator import OteDataUpdateCoordinator
-from homeassistant.config_entries import ConfigEntry
 
 
 async def async_setup_entry(
@@ -27,10 +27,9 @@ class NextDayAvailableBinarySensor(IntegrationOteEntity, BinarySensorEntity):
         return "next_day_available"
 
     @property
-    def name(self):
+    def _name_post_fix(self):
         """Return the name of the sensor."""
-        coordinator: OteDataUpdateCoordinator = self.coordinator
-        return f"{coordinator.settings.name} Next Day Available"
+        return "Next Day Available"
 
     @property
     def device_class(self):

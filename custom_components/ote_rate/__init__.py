@@ -1,16 +1,19 @@
+import logging
+import asyncio
+
 from homeassistant.core import HomeAssistant
 from homeassistant.const import CONF_NAME
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-import logging
-import asyncio
+
 from .const import (
     CONF_CURRENCY,
     DOMAIN,
     CONF_EXCHANGE_RATE,
     CONF_EXCHANGE_RATE_SENSOR_ID,
     CONF_CHARGE,
+    MWH,
 )
 from .coordinator import OteDataUpdateCoordinator, OteRateSettings
 from .api import OteApiClient
@@ -42,6 +45,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
             if CONF_EXCHANGE_RATE_SENSOR_ID in config_entry.options
             else None
         ),
+        energy_unit=MWH,
     )
 
     session = async_get_clientsession(hass)
