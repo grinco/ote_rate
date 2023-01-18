@@ -15,7 +15,9 @@ from homeassistant.config_entries import ConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_setup_entry(hass, entry, async_add_entities: AddEntitiesCallback):
+async def async_setup_entry(
+    hass, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+):
     """Setup sensor platform."""
     coordinator: OteDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities(
@@ -31,7 +33,6 @@ class CostsSensor(IntegrationOteEntity, SensorEntity):
         self, coordinator: OteDataUpdateCoordinator, config_entry: ConfigEntry
     ):
         super().__init__(coordinator, config_entry)
-        print(f"key = {self.key}")
         self.entity_description = SensorEntityDescription(
             device_class=SensorDeviceClass.MONETARY,
             native_unit_of_measurement=f"{coordinator.settings.currency}/{MWH}",
@@ -57,7 +58,11 @@ class CostsSensor(IntegrationOteEntity, SensorEntity):
     def extra_state_attributes(self):
         """Return the state attributes."""
         attributes = super(CostsSensor, self).extra_state_attributes
-        return attributes | self.get_costs()
+        costs = self.get_costs()
+        if costs is not None:
+            attributes = attributes | costs
+
+        return attributes
 
 
 class TodayCostsSensor(CostsSensor):

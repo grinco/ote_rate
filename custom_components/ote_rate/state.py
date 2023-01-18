@@ -8,5 +8,6 @@ class OteStateData:
     today_costs: dict
     next_day_costs: dict | None
 
+    @property
     def next_day_available(self) -> bool:
         return self.next_day_costs is not None

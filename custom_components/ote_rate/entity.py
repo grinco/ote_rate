@@ -9,8 +9,10 @@ from .coordinator import OteDataUpdateCoordinator
 
 class IntegrationOteEntity(CoordinatorEntity):
     """A class for entities using DataUpdateCoordinator."""
+
     _attr_attribution = ATTRIBUTION
     _attr_attribution = ATTRIBUTION
+
     def __init__(
         self, coordinator: OteDataUpdateCoordinator, config_entry: ConfigEntry
     ):
@@ -26,13 +28,11 @@ class IntegrationOteEntity(CoordinatorEntity):
     def unique_id(self):
         """Return a unique ID to use for this entity."""
         coordinator: OteDataUpdateCoordinator = self.coordinator
-        print(f"{coordinator.settings.name}_{self.config_entry.entry_id}_{self.key}")
         return f"{coordinator.settings.name}_{self.config_entry.entry_id}_{self.key}"
 
     @property
     def device_info(self):
         coordinator: OteDataUpdateCoordinator = self.coordinator
-        print((DOMAIN, coordinator.settings.name))
         return DeviceInfo(
             name=coordinator.settings.name,
             identifiers={(DOMAIN, coordinator.settings.name)},

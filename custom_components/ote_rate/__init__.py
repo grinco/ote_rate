@@ -16,7 +16,7 @@ from .coordinator import OteDataUpdateCoordinator, OteRateSettings
 from .api import OteApiClient
 
 """OTE Rate sensor integration."""
-PLATFORMS = [Platform.SENSOR]
+PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 

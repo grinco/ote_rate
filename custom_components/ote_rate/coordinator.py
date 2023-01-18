@@ -84,10 +84,6 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
             else self.settings.custom_exchange_rate
         )
 
-        print(
-            f"exchange_rate {exchange_rate} {self.hass.states.get(self.settings.exchange_rate_sensor_id)}"
-        )
-
         for hour, price in costs.items():
             converted[hour] = price * exchange_rate
 
