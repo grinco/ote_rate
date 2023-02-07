@@ -14,6 +14,13 @@ class DatePriceData:
 
         self.highest_price_hour = max(hour_prices, key=hour_prices.get)
         self.highest_price = hour_prices[self.highest_price_hour]
+        self.attributes = {
+            "hour_prices": hour_prices,
+            "lowest_price_hour": min(hour_prices, key=hour_prices.get),
+            "lowest_price": hour_prices[self.lowest_price_hour],
+            "highest_price_hour": max(hour_prices, key=hour_prices.get),
+            "highest_price": hour_prices[self.highest_price_hour],
+        }
 
 
 @dataclass

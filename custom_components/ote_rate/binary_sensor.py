@@ -6,7 +6,7 @@ from homeassistant.components.binary_sensor import (
 )
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
-from .entity import IntegrationOteEntity
+from .entity import BaseOteSensorEntityDescription, IntegrationOteEntity
 from .coordinator import OteDataUpdateCoordinator
 
 
@@ -15,29 +15,45 @@ async def async_setup_entry(
 ):
     """Setup binary_sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_devices([NextDayAvailableBinarySensor(coordinator, entry)])
+    entities = []
+
+    for sensor in sensors:
+        entities.append(
+            BaseOteBinarySensorEntity(
+                coordinator=coordinator, entity_description=sensor, config_entry=entry
+            )
+        )
+
+    async_add_devices(entities)
 
 
-class NextDayAvailableBinarySensor(IntegrationOteEntity, BinarySensorEntity):
-    """Binary sensor class to signal whether next day prices are available."""
+sensors = [
+    BaseOteSensorEntityDescription(
+        key="next_day_available",
+        name="Next Day Available",
+        state_getter=lambda s: s.next_day_available,
+        device_class=BinarySensorDeviceClass.CONNECTIVITY,
+    )
+]
 
-    @property
-    def key(self):
-        """Return a unique key to use for this entity."""
-        return "next_day_available"
 
-    @property
-    def _name_post_fix(self):
-        """Return the name of the sensor."""
-        return "Next Day Available"
-
-    @property
-    def device_class(self):
-        """Return the class of this binary_sensor."""
-        return BinarySensorDeviceClass.CONNECTIVITY
+class BaseOteBinarySensorEntity(IntegrationOteEntity, BinarySensorEntity):
+    """Base class for all binary sensor entities."""
 
     @property
     def is_on(self):
         """Return true if the binary_sensor is on."""
         coordinator: OteDataUpdateCoordinator = self.coordinator
-        return coordinator.data.next_day_available
+        if hasattr(self.entity_description, "state_getter"):
+            return self.entity_description.state_getter(coordinator.data)
+
+        return None
+
+    @property
+    def native_value(self):
+        """Return the native value of the sensor."""
+        coordinator: OteDataUpdateCoordinator = self.coordinator
+        if hasattr(self.entity_description, "state_getter"):
+            return self.entity_description.state_getter(coordinator.data)
+
+        return None

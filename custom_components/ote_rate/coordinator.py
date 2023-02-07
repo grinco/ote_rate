@@ -23,6 +23,7 @@ class OteRateSettings:
         custom_exchange_rate: float,
         exchange_rate_sensor_id: str,
         energy_unit: str,
+        number_of_digits: int,
     ) -> None:
         """Initialize."""
         self.name = name
@@ -31,6 +32,7 @@ class OteRateSettings:
         self.custom_exchange_rate = custom_exchange_rate
         self.exchange_rate_sensor_id = exchange_rate_sensor_id
         self.energy_price_unit = f"{currency}/{energy_unit}"
+        self.number_of_digits = number_of_digits
 
 
 class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
@@ -70,7 +72,7 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
             raise UpdateFailed() from exception
 
     def __prepare_costs(self, costs: dict) -> dict:
-        return self.__apply_charges(self.__convert_to_currency(costs))
+        return self.__round(self.__apply_charges(self.__convert_to_currency(costs)))
 
     def __convert_to_currency(self, costs: dict) -> dict:
         price = self.settings.currency
@@ -101,5 +103,13 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
 
         for hour, price in costs.items():
             converted[hour] = price - charge
+
+        return converted
+
+    def __round(self, costs: dict) -> dict:
+        converted = dict()
+
+        for hour, price in costs.items():
+            converted[hour] = round(price, self.settings.number_of_digits)
 
         return converted

@@ -14,6 +14,7 @@ from .const import (
     CONF_EXCHANGE_RATE_SENSOR_ID,
     CONF_CHARGE,
     MWH,
+    CURRENCY_CZK,
 )
 from .coordinator import OteDataUpdateCoordinator, OteRateSettings
 from .api import OteApiClient
@@ -29,6 +30,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info("OTE rates setup started")
 
+    currency = config_entry.options[CONF_CURRENCY]
+
     settings = OteRateSettings(
         name=config_entry.options[CONF_NAME],
         charge=config_entry.options[CONF_CHARGE]
@@ -39,13 +42,14 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
             if CONF_EXCHANGE_RATE in config_entry.options
             else None
         ),
-        currency=config_entry.options[CONF_CURRENCY],
+        currency=currency,
         exchange_rate_sensor_id=(
             config_entry.options[CONF_EXCHANGE_RATE_SENSOR_ID]
             if CONF_EXCHANGE_RATE_SENSOR_ID in config_entry.options
             else None
         ),
         energy_unit=MWH,
+        number_of_digits=0 if currency == CURRENCY_CZK else 2,
     )
 
     session = async_get_clientsession(hass)
