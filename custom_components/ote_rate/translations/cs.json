@@ -12,8 +12,8 @@
       "CZK": {
         "title": "Vyberte sensor pro kurz",
         "data": {
-          "read_serial_port": "Serial port name",
-          "baudrate": "Baudrate"
+          "exchange_rate": "Směnný kurz (bude použizo, pokud nebude sensor dostupný)",
+          "exchange_rate_sensor_id": "Sensor pro směnný kurz"
         }
       }
     }
@@ -31,8 +31,8 @@
       "CZK": {
         "title": "Vyberte sensor pro kurz",
         "data": {
-          "read_serial_port": "Serial port name",
-          "baudrate": "Baudrate"
+          "exchange_rate": "Směnný kurz (bude použizo, pokud nebude sensor dostupný)",
+          "exchange_rate_sensor_id": "Sensor pro směnný kurz"
         }
       }
     }

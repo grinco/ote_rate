@@ -12,13 +12,12 @@
       "CZK": {
         "title": "Select exchange rate sensor",
         "data": {
-          "read_serial_port": "Serial port name",
-          "baudrate": "Baudrate"
+          "exchange_rate": "Default exchange rate (fallback when sensor defined)",
+          "exchange_rate_sensor_id": "Exchange sensor"
         }
       }
     }
   },
-
   "options": {
     "step": {
       "init": {
@@ -31,8 +30,8 @@
       "CZK": {
         "title": "Select exchange rate sensor",
         "data": {
-          "read_serial_port": "Serial port name",
-          "baudrate": "Baudrate"
+          "exchange_rate": "Default exchange rate (fallback when sensor defined)",
+          "exchange_rate_sensor_id": "Exchange sensor"
         }
       }
     }
