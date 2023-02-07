@@ -10,7 +10,6 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.components.sensor import (
     SensorEntity,
-    SensorEntityDescription,
 )
 
 
