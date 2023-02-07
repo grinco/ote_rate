@@ -1,8 +1,11 @@
 {
   "name": "OTE Energy Cost Sensor",
-  "content_in_root": true,
   "render_readme": true,
-  "domains": ["sensor"],
-  "homeassistant": "0.99.1",
-  "iot_class": ["Cloud Poll"]
+  "domains": [
+    "binary_sensor",
+    "sensor"
+  ],
+  "iot_class": [
+    "Cloud Poll"
+  ]
 }

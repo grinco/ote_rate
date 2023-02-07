@@ -1,0 +1,16 @@
+default_config:
+
+logger:
+  default: info
+  logs:
+    custom_components.integration_blueprint: debug
+
+# If you need to debug uncomment the line below (doc: https://www.home-assistant.io/integrations/debugpy/)
+# debugpy:
+
+template:
+  - sensor:
+    - name: "Exchange rate EUR - CZK"
+      unique_id: exchange_rate_eur_czk
+      state: >
+        {{ 24.57 }}

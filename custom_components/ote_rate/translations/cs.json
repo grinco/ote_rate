@@ -1,0 +1,40 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Nastavení OTE parseru",
+        "data": {
+          "name": "Název komponenty",
+          "charge": "Poplatky (budou odečteny od ceny na OTE)",
+          "currency": "Měna"
+        }
+      },
+      "CZK": {
+        "title": "Vyberte sensor pro kurz",
+        "data": {
+          "exchange_rate": "Směnný kurz (bude použizo, pokud nebude sensor dostupný)",
+          "exchange_rate_sensor_id": "Sensor pro směnný kurz"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Nastavení OTE parseru",
+        "data": {
+          "name": "Název komponenty",
+          "charge": "Poplatky (budou odečteny od ceny na OTE)",
+          "currency": "Měna"
+        }
+      },
+      "CZK": {
+        "title": "Vyberte sensor pro kurz",
+        "data": {
+          "exchange_rate": "Směnný kurz (bude použizo, pokud nebude sensor dostupný)",
+          "exchange_rate_sensor_id": "Sensor pro směnný kurz"
+        }
+      }
+    }
+  }
+}
