@@ -21,7 +21,7 @@ class OteRateSettings:
         currency: str,
         charge: float,
         custom_exchange_rate: float,
-        exchange_rate_sensor_id: str,
+        exchange_rate_sensor_id: str | None,
         energy_unit: str,
         number_of_digits: int,
     ) -> None:
@@ -69,6 +69,7 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
             )
             return state
         except Exception as exception:
+            _LOGGER.error("Error fetching data: " + exception)
             raise UpdateFailed() from exception
 
     def __prepare_costs(self, costs: dict) -> dict:
@@ -81,7 +82,11 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
 
         converted = dict()
 
-        sensor_rate_state = self.hass.states.get(self.settings.exchange_rate_sensor_id)
+        sensor_rate_state = (
+            self.hass.states.get(self.settings.exchange_rate_sensor_id)
+            if self.settings.exchange_rate_sensor_id is not None
+            else None
+        )
 
         exchange_rate = (
             float(sensor_rate_state.state)
