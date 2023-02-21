@@ -45,9 +45,11 @@ sensors = [
     BaseOteSensorEntityDescription(
         key="next_day_costs",
         name="Next Day Cost",
-        extra_attributes_getter=lambda s: s.next_day_costs.attributes,
+        extra_attributes_getter=lambda s: s.next_day_costs.attributes
+        if s.next_day_costs is not None
+        else {},
         state_getter=lambda s: s.next_day_costs.hour_prices[datetime.now().hour]
-        if hasattr(s, "next_day_costs")
+        if s.next_day_costs is not None
         else None,
         unit_of_measurement_getter=lambda coordinator: coordinator.settings.energy_price_unit,
         device_class=SensorDeviceClass.MONETARY,

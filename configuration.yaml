@@ -1,12 +1,11 @@
+# https://www.home-assistant.io/integrations/default_config/
 default_config:
 
+# https://www.home-assistant.io/integrations/logger/
 logger:
   default: info
   logs:
-    custom_components.integration_blueprint: debug
-
-# If you need to debug uncomment the line below (doc: https://www.home-assistant.io/integrations/debugpy/)
-# debugpy:
+    custom_components.ote_rate: debug
 
 template:
   - sensor:
