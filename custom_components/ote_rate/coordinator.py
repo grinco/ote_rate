@@ -7,7 +7,7 @@ from .api import OteApiClient
 from .state import OteStateData, DatePriceData
 from .const import DOMAIN, OTE_DENNI_TRH, DEFAULT_OTE_CURRENCY
 
-SCAN_INTERVAL = timedelta(seconds=30)
+SCAN_INTERVAL = timedelta(minutes=30)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
