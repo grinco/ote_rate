@@ -1,20 +1,13 @@
 {
   "domain": "ote_rate",
   "name": "OTE Rate Parser",
-  "integration_type": "hub",
-  "documentation": "https://github.com/grinco/ote_rate",
-  "issue_tracker": "https://github.com/grinco/ote_rate/issues",
-  "dependencies": [],
-  "codeowners": [
-    "@grinco",
-    "@yardee"
-  ],
-  "requirements": [
-    "requests",
-    "aiohttp",
-    "asyncio"
-  ],
-  "iot_class": "cloud_polling",
+  "codeowners": ["@grinco", "@yardee"],
   "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/grinco/ote_rate",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/grinco/ote_rate/issues",
+  "requirements": ["requests", "aiohttp", "asyncio"],
   "version": "0.2.3"
 }
