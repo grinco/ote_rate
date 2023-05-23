@@ -55,6 +55,10 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
             date_costs = self.__prepare_costs(
                 await self.api.async_get_costs_for_date(OTE_DENNI_TRH, now)
             )
+
+            if len(date_costs) == 0:
+                return self.data
+
             next_day_costs = self.__prepare_costs(
                 await self.api.async_get_costs_for_date(
                     OTE_DENNI_TRH, now + timedelta(days=1)
@@ -69,8 +73,8 @@ class OteDataUpdateCoordinator(DataUpdateCoordinator[OteStateData]):
             )
             return state
         except Exception as exception:
-            _LOGGER.error("Error fetching data: " + exception)
-            raise UpdateFailed() from exception
+            _LOGGER.error("Error fetching data: " + str(exception))
+            return self.data
 
     def __prepare_costs(self, costs: dict) -> dict:
         return self.__round(self.__apply_charges(self.__convert_to_currency(costs)))
