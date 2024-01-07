@@ -6,14 +6,33 @@
         "data": {
           "name": "Name of the parser",
           "charge": "Set charge if any (it will be deducted from the current price)",
-          "currency": "Currency"
+          "currency": "Currency",
+          "add_distribution_fees": "Add distribution fees and tax to the price"
         }
       },
-      "CZK": {
+      "exchange_rate": {
         "title": "Select exchange rate sensor",
         "data": {
           "exchange_rate": "Default exchange rate (fallback when sensor defined)",
           "exchange_rate_sensor_id": "Exchange sensor"
+        }
+      },
+      "distribution_fees": {
+        "title": "Distribution Fees Settings",
+        "data": {
+          "distribution_fee_h": "Distribution fee high tariff",
+          "distribution_fee_l": "Distribution fee low tariff",
+          "tax_fee": "Electricity tax fee",
+          "system_services_fee": "System services fee",
+          "ote_fee": "OTE fee",
+          "poze_fee": "POZE fee",
+          "tax": "DPH"
+        }
+      },
+      "low_tariff_hours": {
+        "title": "Hours of lower prices",
+        "data": {
+          "distribution_lower_prices_hours": "Hours of lower prices for distribution"
         }
       }
     }
@@ -24,14 +43,33 @@
         "title": "Define OTE rates parser settings",
         "data": {
           "charge": "Set charge if any (it will be deducted from the current price)",
-          "currency": "Currency"
+          "currency": "Currency",
+          "add_distribution_fees": "Add distribution fees and tax to the price"
         }
       },
-      "CZK": {
+      "exchange_rate": {
         "title": "Select exchange rate sensor",
         "data": {
           "exchange_rate": "Default exchange rate (fallback when sensor defined)",
           "exchange_rate_sensor_id": "Exchange sensor"
+        }
+      },
+      "distribution_fees": {
+        "title": "Distribution Fees Settings",
+        "data": {
+          "distribution_fee_h": "Distribution fee high tariff",
+          "distribution_fee_l": "Distribution fee low tariff",
+          "tax_fee": "Electricity tax fee",
+          "system_services_fee": "System services fee",
+          "ote_fee": "OTE fee",
+          "poze_fee": "POZE fee",
+          "tax": "DPH"
+        }
+      },
+      "low_tariff_hours": {
+        "title": "Hours of lower prices",
+        "data": {
+          "distribution_lower_prices_hours": "Hours of lower prices for distribution"
         }
       }
     }

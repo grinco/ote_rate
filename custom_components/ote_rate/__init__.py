@@ -7,15 +7,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .const import (
-    CONF_CURRENCY,
-    DOMAIN,
-    CONF_EXCHANGE_RATE,
-    CONF_EXCHANGE_RATE_SENSOR_ID,
-    CONF_CHARGE,
-    MWH,
-    CURRENCY_CZK,
-)
+from .const import *
 from .coordinator import OteDataUpdateCoordinator, OteRateSettings
 from .api import OteApiClient
 
@@ -50,6 +42,35 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         ),
         energy_unit=MWH,
         number_of_digits=0 if currency == CURRENCY_CZK else 2,
+        add_distribution_fees=config_entry.options[CONF_ADD_DISTRIBUTION_FEES]
+        if CONF_ADD_DISTRIBUTION_FEES in config_entry.options
+        else False,
+        distribution_fee_h=config_entry.options[CONF_DISTRIBUTION_FEE_H]
+        if CONF_DISTRIBUTION_FEE_H in config_entry.options
+        else None,
+        distribution_fee_l=config_entry.options[CONF_DISTRIBUTION_FEE_L]
+        if CONF_DISTRIBUTION_FEE_L in config_entry.options
+        else None,
+        tax_fee=config_entry.options[CONF_TAX_FEE]
+        if CONF_TAX_FEE in config_entry.options
+        else None,
+        system_services_fee=config_entry.options[CONF_SYSTEM_SERVICES_FEE]
+        if CONF_SYSTEM_SERVICES_FEE in config_entry.options
+        else None,
+        ote_fee=config_entry.options[CONF_OTE_FEE]
+        if CONF_OTE_FEE in config_entry.options
+        else None,
+        poze_fee=config_entry.options[CONF_POZE_FEE]
+        if CONF_POZE_FEE in config_entry.options
+        else None,
+        tax=config_entry.options[CONF_TAX]
+        if CONF_TAX in config_entry.options
+        else None,
+        distribution_lower_prices_hours=config_entry.options[
+            CONF_DISTRIBUTION_LOWER_PRICES_HOURS
+        ]
+        if CONF_DISTRIBUTION_LOWER_PRICES_HOURS in config_entry.options
+        else None,
     )
 
     session = async_get_clientsession(hass)

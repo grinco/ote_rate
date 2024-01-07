@@ -6,14 +6,33 @@
         "data": {
           "name": "Název komponenty",
           "charge": "Poplatky (budou odečteny od ceny na OTE)",
-          "currency": "Měna"
+          "currency": "Měna",
+          "add_distribution_fees": "Přidat distribuční poplatky a DPH"
         }
       },
-      "CZK": {
+      "exchange_rate": {
         "title": "Vyberte sensor pro kurz",
         "data": {
           "exchange_rate": "Směnný kurz (bude použizo, pokud nebude sensor dostupný)",
           "exchange_rate_sensor_id": "Sensor pro směnný kurz"
+        }
+      },
+      "distribution_fees": {
+        "title": "Nastavení distribučních poplatků",
+        "data": {
+          "distribution_fee_h": "Disdtribuční poplatek VT",
+          "distribution_fee_l": "Disdtribuční poplatek NT",
+          "tax_fee": "Daň z elektřiny - poplatek",
+          "system_services_fee": "Systémové služby",
+          "ote_fee": "Činnost OTE",
+          "poze_fee": "Podpora výkupu elektřiny z obnovitelných zdrojů (POZE)",
+          "tax": "DPH na elektřinu"
+        }
+      },
+      "low_tariff_hours": {
+        "title": "Hodiny nízkého tarifu",
+        "data": {
+          "distribution_lower_prices_hours": "Hodiny nízkého tarifu pro distribuci"
         }
       }
     }
@@ -25,14 +44,33 @@
         "data": {
           "name": "Název komponenty",
           "charge": "Poplatky (budou odečteny od ceny na OTE)",
-          "currency": "Měna"
+          "currency": "Měna",
+          "add_distribution_fees": "Přidat distribuční poplatky a DPH"
         }
       },
-      "CZK": {
+      "exchange_rate": {
         "title": "Vyberte sensor pro kurz",
         "data": {
           "exchange_rate": "Směnný kurz (bude použizo, pokud nebude sensor dostupný)",
           "exchange_rate_sensor_id": "Sensor pro směnný kurz"
+        }
+      },
+      "distribution_fees": {
+        "title": "Nastavení distribučních poplatků",
+        "data": {
+          "distribution_fee_h": "Disdtribuční poplatek VT",
+          "distribution_fee_l": "Disdtribuční poplatek NT",
+          "tax_fee": "Daň z elektřiny - poplatek",
+          "system_services_fee": "Systémové služby",
+          "ote_fee": "Činnost OTE",
+          "poze_fee": "Podpora výkupu elektřiny z obnovitelných zdrojů (POZE)",
+          "tax": "DPH na elektřinu"
+        }
+      },
+      "low_tariff_hours": {
+        "title": "Hodiny nízkého tarifu",
+        "data": {
+          "distribution_lower_prices_hours": "Hodiny nízkého tarifu pro distribuci"
         }
       }
     }
