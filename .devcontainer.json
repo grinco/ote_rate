@@ -1,6 +1,6 @@
 {
     "name": "ote_rate",
-    "image": "mcr.microsoft.com/vscode/devcontainers/python:0-3.10-bullseye",
+    "image": "mcr.microsoft.com/vscode/devcontainers/python:bullseye",
     "postCreateCommand": "scripts/setup",
     "forwardPorts": [
         8123

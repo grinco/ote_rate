@@ -7,7 +7,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 from dataclasses import dataclass
-from typing import Callable, TypeVar
+from typing import Any, Callable, Mapping, TypeVar
 from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
@@ -24,7 +24,6 @@ T = TypeVar("T")
 class BaseOteSensorEntityDescription(SensorEntityDescription):
     """base class for ote sensor declarations"""
 
-    extra_attributes_getter: Callable[[OteStateData], T] | None = None
     extra_attributes_getter: Callable[[OteStateData], T] | None = None
     state_getter: Callable[[OteStateData], T] = None
     unit_of_measurement_getter: Callable[[OteDataUpdateCoordinator], str] | None = None
@@ -92,5 +91,11 @@ class IntegrationOteEntity(CoordinatorEntity):
             attributes = attributes | self.entity_description.extra_attributes_getter(
                 coordinator.data
             )
+
+        # if (
+        #     "extra_attributes_data" in self.entity_description
+        #     and self.entity_description.extra_attributes_data is not None
+        # ):
+        #     attributes = attributes | self.entity_description.extra_attributes_data
 
         return attributes

@@ -9,5 +9,5 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/grinco/ote_rate/issues",
   "requirements": ["requests", "aiohttp", "asyncio"],
-  "version": "0.2.4"
+  "version": "0.3.0"
 }
