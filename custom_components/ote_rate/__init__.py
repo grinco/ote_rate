@@ -6,6 +6,7 @@ from homeassistant.const import CONF_NAME
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.typing import ConfigType
 
 from .const import *
 from .coordinator import OteDataUpdateCoordinator, OteRateSettings
@@ -14,6 +15,17 @@ from .api import OteApiClient
 """OTE Rate sensor integration."""
 PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
 _LOGGER: logging.Logger = logging.getLogger(__package__)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Activate the legacy ote rate sensor."""
+    if DOMAIN not in config:
+        return True
+
+    config = config[DOMAIN]
+    hass.config_entries.async_setup()
+
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:

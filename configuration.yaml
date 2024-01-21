@@ -13,3 +13,6 @@ template:
       unique_id: exchange_rate_eur_czk
       state: >
         {{ 24.57 }}
+
+sensor:
+  - platform: ote_rate
