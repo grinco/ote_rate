@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Final
 
 DOMAIN: Final = "ote_rate"
-VERSION: Final = "0.2.4"
+VERSION: Final = "v0.0.0"
 ATTR_MANUFACTURER: Final = "OTE"
 ATTRIBUTION = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
 
