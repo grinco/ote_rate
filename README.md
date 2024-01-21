@@ -1,3 +1,6 @@
+[![Push actions](https://github.com/grinco/ote_rate/actions/workflows/push.yml/badge.svg)](https://github.com/grinco/ote_rate/actions/workflows/push.yml)
+[![Build actions](https://github.com/grinco/ote_rate/actions/workflows/build.yaml/badge.svg)](https://github.com/grinco/ote_rate/actions/workflows/build.yaml)
+
 # OTE Energy Cost Sensor for Home Assistant
 
 This is an integration providing current price per megawatt of energy based on the quote
