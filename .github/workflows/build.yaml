@@ -16,6 +16,7 @@ jobs:
       - name: Patch manifest and zip
         run: |
           sed -i 's/v0.0.0/${{ steps.version.outputs.version }}/' custom_components/ote_rate/manifest.json
+          sed -i 's/v0.0.0/${{ steps.version.outputs.version }}/' custom_components/ote_rate/const.py
         
           cd custom_components/ote_rate/
           zip ../../ote_rate.zip ./* translations/* -x '.*'
