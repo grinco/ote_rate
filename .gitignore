@@ -10,7 +10,7 @@ __pycache__
 .coverage
 .vscode
 coverage.xml
-
+.devcontainer.json
 
 # Home Assistant configuration
 .cloud

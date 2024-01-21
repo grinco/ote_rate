@@ -1,5 +1,8 @@
 {
   "name": "OTE Energy Cost Sensor",
   "render_readme": true,
-  "country": "CZ"
+  "country": "CZ",
+  "zip_release": true,
+  "filename": "ote_rate.zip",
+  "hide_default_branch": true
 }
