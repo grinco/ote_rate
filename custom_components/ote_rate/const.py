@@ -1,0 +1,46 @@
+"""Constants used by ote rates."""
+from __future__ import annotations
+from typing import Final
+
+DOMAIN: Final = "ote_rate"
+VERSION: Final = "0.2.4"
+ATTR_MANUFACTURER: Final = "OTE"
+ATTRIBUTION = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina/denni-trh"
+
+MWH: Final = "MWh"
+NEXT_DAY_PREFIX: Final = "next_day_"
+NEXT_DAY_AVAILABLE_ATTRIBUTE: Final = "next_day_available"
+CONF_CURRENCY: Final = "currency"
+CONF_EXCHANGE_RATE: Final = "exchange_rate"
+CONF_EXCHANGE_RATE_SENSOR_ID: Final = "exchange_rate_sensor_id"
+CONF_CHARGE: Final = "charge"
+CONF_ADD_DISTRIBUTION_FEES: Final = "add_distribution_fees"
+CONF_DISTRIBUTION_FEE_H: Final = "distribution_fee_h"
+CONF_DISTRIBUTION_FEE_L: Final = "distribution_fee_l"
+CONF_TAX_FEE: Final = "tax_fee"
+CONF_SYSTEM_SERVICES_FEE: Final = "system_services_fee"
+CONF_OTE_FEE: Final = "ote_fee"
+CONF_POZE_FEE: Final = "poze_fee"
+CONF_TAX: Final = "tax"
+CONF_DISTRIBUTION_LOWER_PRICES_HOURS: Final = "distribution_lower_prices_hours"
+CURRENCY_EUR: Final = "EUR"
+CURRENCY_CZK: Final = "CZK"
+FEE_UNIT: Final = "CZK/MWh"
+DEFAULT_OTE_CURRENCY: Final = CURRENCY_EUR
+DEFAULT_NAME: Final = "OTE Energy"
+COST_RESPONSE_NAME: Final = "Cena (EUR/MWh)"
+HOUR_RESPONSE_NAME: Final = "Hodina"
+OTE_BASE_URL: Final = "https://www.ote-cr.cz/cs/kratkodobe-trhy/elektrina"
+OTE_DENNI_TRH: Final = "denni-trh"
+OTE_CHART_DATA_ENDPOINT: Final = "@@chart-data"
+
+SETTINGS_DATA_KEY: Final = "settings"
+
+DAY_MONDAY: Final = "Monday"
+DAY_TUESDAY: Final = "Tuesday"
+DAY_WEDNESDAY: Final = "Wednesday"
+DAY_THURSDAY: Final = "Thursday"
+DAY_FRIDAY: Final = "Friday"
+DAY_SATURDAY: Final = "Saturday"
+DAY_SUNDAY: Final = "Sunday"
+DAYS = [DAY_MONDAY, DAY_TUESDAY, DAY_WEDNESDAY, DAY_THURSDAY, DAY_FRIDAY, DAY_SATURDAY, DAY_SUNDAY]
